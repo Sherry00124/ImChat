@@ -168,10 +168,10 @@ const actions: ActionTree<ChatState, RootState> = {
         commit(SET_USER_GATHER, res.data);
         // 取消loading
         Vue.prototype.$message.info(res.msg);
-        socket.emit('joinFriendSocket', {
-          userId: user.userId,
-          friendId: res.data.userId,
-        });
+        // socket.emit('joinFriendSocket', {
+        //   userId: user.userId,
+        //   friendId: res.data.userId,
+        // });
       } else {
         Vue.prototype.$message.error(res.msg);
       }
