@@ -31,13 +31,13 @@
     <div class="message-main" :style="{ opacity: messageOpacity }">
       <div class="message-content">
         <transition name="noData">
-          <div class="message-content-noData" v-if="isNoData">没有更多消息了~</div>
+          <div class="message-content-noData" v-if="isNoData">No more message~</div>
         </transition>
         <template v-for="item in activeRoom.messages">
           <!-- 消息被撤回 -->
           <div class="message-content-revoke" v-if="item.isRevoke" :key="item.userId + item.time">
-            <span v-if="item.userId === user.userId"> 你撤回了一条消息 </span>
-            <span v-else> {{ item.revokeUserName }}撤回了一条消息 </span>
+            <span v-if="item.userId === user.userId"> You withdrew a message. </span>
+            <span v-else> {{ item.revokeUserName }}withdrew a message </span>
           </div>
           <!-- 正常消息 -->
           <div v-else class="message-content-message" :key="item.userId + item.time" :class="{ 'text-right': item.userId === user.userId }">
@@ -53,7 +53,9 @@
               </div>
               <!-- 视频格式文件 -->
               <div class="message-content-image" v-if="item.messageType === 'video'">
-                <video :src="apiUrl + '/static/file/' + item.content" controls="controls">您的浏览器不支持 video 标签。</video>
+                <video :src="apiUrl + '/static/file/' + item.content" controls="controls">
+                  Your browser does not support the video tag.
+                </video>
               </div>
               <!-- 附件类型消息 -->
               <div class="message-content-file" v-else-if="item.messageType === 'file'" @click="download(item)">
@@ -69,8 +71,8 @@
               </div>
               <!-- 自定义右键菜单 -->
               <v-contextmenu :ref="'message' + item.userId + item.time">
-                <v-contextmenu-item v-if="item.messageType === 'text'" @click="handleCommand('COPY', item)">复制</v-contextmenu-item>
-                <v-contextmenu-item v-if="isShowRevoke(item)" @click="handleCommand('REVOKE', item)">撤回</v-contextmenu-item>
+                <v-contextmenu-item v-if="item.messageType === 'text'" @click="handleCommand('COPY', item)">Copy</v-contextmenu-item>
+                <v-contextmenu-item v-if="isShowRevoke(item)" @click="handleCommand('REVOKE', item)">Withdraw</v-contextmenu-item>
               </v-contextmenu>
             </div>
           </div>
@@ -171,7 +173,7 @@ export default class Message extends Vue {
       window.addEventListener('copy', copy);
       document.execCommand('Copy');
       window.removeEventListener('copy', copy);
-      this.$message.info('已粘贴至剪切板');
+      this.$message.info('Paste to clipboard');
       // eslint-disable-next-line no-undef
     } else if (type === 'REVOKE') {
       // 消息撤回功能

@@ -5,7 +5,7 @@
  * @Date: 2020-12-08 16:15:10
 -->
 <template>
-  <a-modal title="邀请好友加入本群" app :visible="showContactDialog" footer="" @cancel="cancelEvent">
+  <a-modal title="Invite friends to join this group" app :visible="showContactDialog" footer="" @cancel="cancelEvent">
     <a-transfer
       class="tree-transfer"
       :data-source="dataSource"

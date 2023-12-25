@@ -18,17 +18,17 @@ export class FriendService {
     try {
       if (userId) {
         return {
-          msg: '获取用户好友成功',
+          msg: `Get user's friend success`,
           data: await this.friendRepository.find({ userId: userId })
         }
       } else {
         return {
-          msg: '获取用户好友失败',
+          msg: `Failed to get user's friends`,
           data: await this.friendRepository.find()
         }
       }
     } catch (e) {
-      return { code: RCode.ERROR, msg: '获取用户好友失败', data: e }
+      return { code: RCode.ERROR, msg: `Failed to get user's friends`, data: e }
     }
   }
 

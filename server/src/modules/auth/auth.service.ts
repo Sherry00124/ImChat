@@ -50,11 +50,11 @@ export class AuthService {
       })
     }
     if (!user) {
-      return { code: 1, msg: '用户名或密码错误', data: '' }
+      return { code: 1, msg: 'Incorrect user name or password', data: '' }
     }
     const payload = { userId: user.userId }
     return {
-      msg: '登录成功',
+      msg: 'Login successfully',
       data: {
         user: user,
         token: this.jwtService.sign(payload)
@@ -65,7 +65,7 @@ export class AuthService {
   async register(user: User): Promise<any> {
     const isHave = await this.userRepository.find({ username: user.username })
     if (isHave.length) {
-      return { code: RCode.FAIL, msg: '用户名重复', data: '' }
+      return { code: RCode.FAIL, msg: 'Duplicate username', data: '' }
     }
     user.avatar = `/avatar/avatar${Math.round(Math.random() * 19 + 1)}.png`
     user.role = 'user'
@@ -73,26 +73,26 @@ export class AuthService {
     user.password = md5(user.password)
     const newUser = await this.userRepository.save(user)
     const payload = { userId: newUser.userId }
-    // 默认加入群组
-    await this.groupUserRepository.save({
-      userId: newUser.userId,
-      groupId: defaultGroupId
-    })
-    // 默认添加机器人为好友
-    await this.userMapRepository.save({
-      userId: newUser.userId,
-      friendId: defaultRobotId
-    })
-    // 机器人欢迎语(默认留言)
-    await this.friendMessageRepository.save({
-      userId: defaultRobotId,
-      friendId: newUser.userId,
-      content: defaultWelcomeMessage,
-      messageType: 'text',
-      time: new Date().valueOf()
-    })
+    // // 默认加入群组
+    // await this.groupUserRepository.save({
+    //   userId: newUser.userId,
+    //   groupId: defaultGroupId
+    // })
+    // // 默认添加机器人为好友
+    // await this.userMapRepository.save({
+    //   userId: newUser.userId,
+    //   friendId: defaultRobotId
+    // })
+    // // 机器人欢迎语(默认留言)
+    // await this.friendMessageRepository.save({
+    //   userId: defaultRobotId,
+    //   friendId: newUser.userId,
+    //   content: defaultWelcomeMessage,
+    //   messageType: 'text',
+    //   time: new Date().valueOf()
+    // })
     return {
-      msg: '注册成功',
+      msg: 'Register successfully',
       data: {
         user: newUser,
         token: this.jwtService.sign(payload)

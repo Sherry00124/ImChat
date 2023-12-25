@@ -70,27 +70,27 @@ export class ChatGateway {
     const { userId } = user
     // 连接默认加入DEFAULG_GROUP
     // TODO 待优化
-    client.join(defaultGroupId)
+    // client.join(defaultGroupId)
     // 进来统计一下在线人数
-    console.log('用户上线', userId)
+    console.log('Online', userId)
     // 上线提醒广播给所有人
-    client.broadcast.emit('userOnline', {
-      code: RCode.OK,
-      msg: 'userOnline',
-      data: userId
-    })
+    // client.broadcast.emit('userOnline', {
+    //   code: RCode.OK,
+    //   msg: 'userOnline',
+    //   data: userId
+    // })
 
     // 用户独有消息房间 根据userId
     if (userId) {
       client.join(userId)
     }
-    return '连接成功'
+    return 'Connect successfully'
   }
 
   // socket断连钩子
   async handleDisconnect(client: Socket): Promise<any> {
     const userId = client.handshake.query.userId
-    console.log('用户下线', userId)
+    console.log('Offline', userId)
     // 下线提醒广播给所有人
     client.broadcast.emit('userOffline', {
       code: RCode.OK,
@@ -114,7 +114,7 @@ export class ChatGateway {
       if (isHaveGroup) {
         this.server.to(data.userId).emit('addGroup', {
           code: RCode.FAIL,
-          msg: '该群名字已存在',
+          msg: 'Group name already exist.',
           data: isHaveGroup
         })
         return
@@ -131,13 +131,14 @@ export class ChatGateway {
       data.members = [member]
       this.server.to(group.groupId).emit('addGroup', {
         code: RCode.OK,
-        msg: `成功创建群${data.groupName}`,
+        msg: `Create grouop${data.groupName}successfully`,
         data: group
       })
     } else {
-      this.server
-        .to(data.userId)
-        .emit('addGroup', { code: RCode.FAIL, msg: `你没资格创建群` })
+      this.server.to(data.userId).emit('addGroup', {
+        code: RCode.FAIL,
+        msg: `You don't get to create a group.`
+      })
     }
   }
 
@@ -167,18 +168,21 @@ export class ChatGateway {
         const res = { group: group, user: user }
         this.server.to(group.groupId).emit('joinGroup', {
           code: RCode.OK,
-          msg: `${user.username}加入群${group.groupName}`,
+          msg: `${user.username}join the group${group.groupName}`,
           data: res
         })
       } else {
-        this.server
-          .to(data.userId)
-          .emit('joinGroup', { code: RCode.FAIL, msg: '进群失败', data: '' })
+        this.server.to(data.userId).emit('joinGroup', {
+          code: RCode.FAIL,
+          msg: 'Failed to enter group',
+          data: ''
+        })
       }
     } else {
-      this.server
-        .to(data.userId)
-        .emit('joinGroup', { code: RCode.FAIL, msg: '你没资格进群' })
+      this.server.to(data.userId).emit('joinGroup', {
+        code: RCode.FAIL,
+        msg: 'You have no business being in the group.'
+      })
     }
   }
 
@@ -196,13 +200,13 @@ export class ChatGateway {
       const res = { group: group, user: user }
       this.server.to(group.groupId).emit('joinGroupSocket', {
         code: RCode.OK,
-        msg: `${user.username}加入群${group.groupName}`,
+        msg: `${user.username}join the group${group.groupName}`,
         data: res
       })
     } else {
       this.server.to(data.userId).emit('joinGroupSocket', {
         code: RCode.FAIL,
-        msg: '进群失败',
+        msg: 'Add group failed',
         data: ''
       })
     }
@@ -222,7 +226,7 @@ export class ChatGateway {
       if (!userGroupMap || !data.groupId) {
         this.server.to(data.userId).emit('groupMessage', {
           code: RCode.FAIL,
-          msg: '群消息发送错误',
+          msg: 'Group message sending error',
           data: ''
         })
         return
@@ -259,9 +263,10 @@ export class ChatGateway {
         }
       })
     } else {
-      this.server
-        .to(data.userId)
-        .emit('groupMessage', { code: RCode.FAIL, msg: '你没资格发消息' })
+      this.server.to(data.userId).emit('groupMessage', {
+        code: RCode.FAIL,
+        msg: `You're in no position to send a message.`
+      })
     }
   }
 
@@ -278,7 +283,7 @@ export class ChatGateway {
         if (data.userId === data.friendId) {
           this.server.to(data.userId).emit('addFriend', {
             code: RCode.FAIL,
-            msg: '不能添加自己为好友',
+            msg: `Can't add yourself as a friend`,
             data: ''
           })
           return
@@ -299,7 +304,7 @@ export class ChatGateway {
         if (relation1 || relation2) {
           this.server.to(data.userId).emit('addFriend', {
             code: RCode.FAIL,
-            msg: '已经有该好友',
+            msg: 'Already have the friend',
             data: data
           })
           return
@@ -334,7 +339,7 @@ export class ChatGateway {
           } else {
             this.server.to(data.userId).emit('addFriend', {
               code: RCode.FAIL,
-              msg: '该好友不存在',
+              msg: 'This friend does not exist',
               data: ''
             })
             return
@@ -387,21 +392,22 @@ export class ChatGateway {
         friend.online = onlineUserIdArr.includes(friend.userId) ? 1 : 0
         this.server.to(data.userId).emit('addFriend', {
           code: RCode.OK,
-          msg: `添加好友${friend.username}成功`,
+          msg: `Add friend${friend.username}successfully`,
           data: friend
         })
         // 发起添加的人默认在线
         user.online = 1
         this.server.to(data.friendId).emit('addFriend', {
           code: RCode.OK,
-          msg: `${user.username}添加你为好友`,
+          msg: `${user.username}add you as friend`,
           data: user
         })
       }
     } else {
-      this.server
-        .to(data.userId)
-        .emit('addFriend', { code: RCode.FAIL, msg: '你没资格加好友' })
+      this.server.to(data.userId).emit('addFriend', {
+        code: RCode.FAIL,
+        msg: `You don't get to be a friend.`
+      })
     }
   }
 
@@ -425,7 +431,7 @@ export class ChatGateway {
         client.join(roomId)
         this.server.to(data.userId).emit('joinFriendSocket', {
           code: RCode.OK,
-          msg: '进入私聊socket成功',
+          msg: 'Successful entry into private chat socket.',
           data: relation
         })
       }
@@ -482,7 +488,7 @@ export class ChatGateway {
     } else {
       this.server.to(data.userId).emit('friendMessage', {
         code: RCode.FAIL,
-        msg: '你没资格发消息',
+        msg: `You're in no position to send a message.`,
         data
       })
     }
@@ -490,7 +496,7 @@ export class ChatGateway {
 
   // 通过输入内容模糊匹配自动回复词条
   async getReplyMessage(content: string) {
-    const failMessage = '智能助手不知道你在说什么。'
+    const failMessage = `The Intelligent Assistant doesn't know what you're talking about.`
     try {
       // 此处引用分词器进行中文分词
       // nodejieba
@@ -680,7 +686,7 @@ export class ChatGateway {
       userArr = [...Object.values(userGather), ...friendArr]
       this.server.to(user.userId).emit('chatData', {
         code: RCode.OK,
-        msg: '获取聊天数据成功',
+        msg: 'Getting Chat Data Successfully',
         data: {
           groupData: groupArr,
           friendData: friendArr,
@@ -697,11 +703,11 @@ export class ChatGateway {
     @ConnectedSocket() client: Socket,
     @MessageBody() groupMap: GroupMap
   ): Promise<any> {
-    if (groupMap.groupId === defaultGroupId) {
-      return this.server
-        .to(groupMap.userId)
-        .emit('exitGroup', { code: RCode.FAIL, msg: '默认群不可退' })
-    }
+    // if (groupMap.groupId === defaultGroupId) {
+    //   return this.server
+    //     .to(groupMap.userId)
+    //     .emit('exitGroup', { code: RCode.FAIL, msg: '默认群不可退' })
+    // }
     const user = await this.userRepository.findOne({ userId: groupMap.userId })
     const group = await this.groupRepository.findOne({
       groupId: groupMap.groupId
@@ -712,13 +718,15 @@ export class ChatGateway {
     })
     if (user && group && map) {
       await this.groupUserRepository.remove(map)
-      return this.server
-        .to(groupMap.groupId)
-        .emit('exitGroup', { code: RCode.OK, msg: '退群成功', data: groupMap })
+      return this.server.to(groupMap.groupId).emit('exitGroup', {
+        code: RCode.OK,
+        msg: 'Successful withdrawal',
+        data: groupMap
+      })
     }
     this.server
       .to(groupMap.userId)
-      .emit('exitGroup', { code: RCode.FAIL, msg: '退群失败' })
+      .emit('exitGroup', { code: RCode.FAIL, msg: 'Failed' })
   }
 
   // 删好友
@@ -745,13 +753,13 @@ export class ChatGateway {
       await this.friendRepository.remove(map2)
       return this.server.to(userMap.userId).emit('exitFriend', {
         code: RCode.OK,
-        msg: '删好友成功',
+        msg: 'Delete Friend Successfully',
         data: userMap
       })
     }
     this.server
       .to(userMap.userId)
-      .emit('exitFriend', { code: RCode.FAIL, msg: '删好友失败' })
+      .emit('exitFriend', { code: RCode.FAIL, msg: 'Delete Friend Failure' })
   }
 
   // 消息撤回
@@ -769,7 +777,7 @@ export class ChatGateway {
       await this.groupMessageRepository.remove(groupMessage)
       return this.server.to(messageDto.groupId).emit('revokeMessage', {
         code: RCode.OK,
-        msg: '已撤回了一条消息',
+        msg: 'A message has been withdrawn',
         data: messageDto
       })
     } else {
@@ -780,11 +788,11 @@ export class ChatGateway {
         messageDto.userId > messageDto.friendId
           ? messageDto.userId + messageDto.friendId
           : messageDto.friendId + messageDto.userId
-      console.log('消息撤回---' + messageDto._id)
+      console.log('Message withdraw---' + messageDto._id)
       await this.friendMessageRepository.remove(friendMessage)
       return this.server.to(roomId).emit('revokeMessage', {
         code: RCode.OK,
-        msg: '已撤回了一条消息',
+        msg: 'A message has been withdrawn',
         data: messageDto
       })
     }
@@ -849,7 +857,7 @@ export class ChatGateway {
             // 广播所有被邀请者 (此处暂不判断该好友是否在线,统一广播,后期可优化)
             this.server.to(friendId).emit('joinGroup', {
               code: RCode.OK,
-              msg: isUser.username + '邀请您加入群聊' + group.groupName,
+              msg: isUser.username + 'invite you to add' + group.groupName,
               data: res
             })
           }
@@ -857,14 +865,14 @@ export class ChatGateway {
         console.log('inviteFriendsIntoGroup', res)
         this.server.to(group.groupId).emit('joinGroup', {
           code: RCode.OK,
-          msg: '邀请' + data.friendIds.length + '位好友加入群聊',
+          msg: 'Invite' + data.friendIds.length + 'friends join the group',
           data: res
         })
       }
     } catch (error) {
       this.server.to(data.userId).emit('joinGroup', {
         code: RCode.FAIL,
-        msg: '邀请失败:' + error,
+        msg: 'Invite failed:' + error,
         data: null
       })
     }

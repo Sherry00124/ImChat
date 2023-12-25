@@ -11,7 +11,7 @@ export class Group {
   @Column()
   groupName: string
 
-  @Column({ default: '群主很懒,没写公告' })
+  @Column({ default: 'No announcement at this time' })
   notice: string
 
   @Column({ type: 'double', default: new Date().valueOf() })
@@ -32,7 +32,7 @@ export class GroupMap {
   @Column({
     type: 'double',
     default: new Date().valueOf(),
-    comment: '进群时间'
+    comment: 'Admission time'
   })
   createTime: number
 }

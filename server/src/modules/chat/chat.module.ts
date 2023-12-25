@@ -44,40 +44,39 @@ export class ChatModule {
   ) {}
   async onModuleInit() {
     // 默认新增群组 用户问题反馈群
-    const defaultGroup = await this.groupRepository.findOne({
-      groupId: defaultGroupId
-    })
-    if (!defaultGroup) {
-      await this.groupRepository.save({
-        groupId: defaultGroupId,
-        groupName: defaultGroupName,
-        userId: defaultRobotId, // 群主默认为智能助手
-        createTime: new Date().valueOf()
-      })
-      console.log('create default group ' + defaultGroupName)
-      // 机器人默认加入群组
-      await this.groupUserRepository.save({
-        userId: defaultRobotId,
-        groupId: defaultGroupId
-      })
-    }
-
-    // 默认新建机器人
-    const defaultRobotArr = await this.userRepository.find({
-      username: defaultRobot
-    })
-    if (!defaultRobotArr.length) {
-      await this.userRepository.save({
-        userId: 'robot',
-        username: defaultRobot,
-        avatar: '/avatar/robot.png',
-        role: 'robot',
-        tag: '',
-        status: 'on',
-        createTime: new Date().valueOf(),
-        password: md5('robot')
-      })
-      console.log('create default robot ' + defaultRobot)
-    }
+    // const defaultGroup = await this.groupRepository.findOne({
+    //   groupId: defaultGroupId
+    // })
+    // if (!defaultGroup) {
+    //   await this.groupRepository.save({
+    //     groupId: defaultGroupId,
+    //     groupName: defaultGroupName,
+    //     userId: defaultRobotId, // 群主默认为智能助手
+    //     createTime: new Date().valueOf()
+    //   })
+    //   console.log('create default group ' + defaultGroupName)
+    //   // 机器人默认加入群组
+    //   await this.groupUserRepository.save({
+    //     userId: defaultRobotId,
+    //     groupId: defaultGroupId
+    //   })
+    // }
+    // // 默认新建机器人
+    // const defaultRobotArr = await this.userRepository.find({
+    //   username: defaultRobot
+    // })
+    // if (!defaultRobotArr.length) {
+    //   await this.userRepository.save({
+    //     userId: 'robot',
+    //     username: defaultRobot,
+    //     avatar: '/avatar/robot.png',
+    //     role: 'robot',
+    //     tag: '',
+    //     status: 'on',
+    //     createTime: new Date().valueOf(),
+    //     password: md5('robot')
+    //   })
+    //   console.log('create default robot ' + defaultRobot)
+    // }
   }
 }

@@ -25,11 +25,15 @@ export class GroupService {
           const data = await this.groupRepository.findOne({ groupId: groupId })
           groupArr.push(data)
         }
-        return { msg: '获取群信息成功', data: groupArr }
+        return { msg: 'Get group information successfully', data: groupArr }
       }
-      return { code: RCode.FAIL, msg: '获取群信息失败', data: null }
+      return {
+        code: RCode.FAIL,
+        msg: 'Failed to get group information',
+        data: null
+      }
     } catch (e) {
-      return { code: RCode.ERROR, msg: '获取群失败', data: e }
+      return { code: RCode.ERROR, msg: 'Failed to get group', data: e }
     }
   }
 
@@ -38,12 +42,12 @@ export class GroupService {
       let data
       if (userId) {
         data = await this.groupUserRepository.find({ userId: userId })
-        return { msg: '获取用户所有群成功', data }
+        return { msg: 'Get all group successes for a user', data }
       }
       data = await this.groupUserRepository.find()
-      return { msg: '获取系统所有群成功', data }
+      return { msg: 'Get all groups in the system successfully', data }
     } catch (e) {
-      return { code: RCode.ERROR, msg: '获取用户的群失败', data: e }
+      return { code: RCode.ERROR, msg: `Failed to get user's group`, data: e }
     }
   }
 
@@ -92,9 +96,13 @@ export class GroupService {
         })
         return { data: groups }
       }
-      return { code: RCode.FAIL, msg: '请输入群昵称', data: null }
+      return {
+        code: RCode.FAIL,
+        msg: 'Please enter the group nickname',
+        data: null
+      }
     } catch (e) {
-      return { code: RCode.ERROR, msg: '查找群错误', data: null }
+      return { code: RCode.ERROR, msg: 'Finding Group Errors', data: null }
     }
   }
 
@@ -103,11 +111,11 @@ export class GroupService {
       await this.groupRepository.update(group.groupId, group)
       return {
         code: RCode.OK,
-        msg: '修改成功',
+        msg: 'Modified successfully',
         data: group
       }
     } catch (e) {
-      return { code: RCode.ERROR, msg: '更新失败', data: null }
+      return { code: RCode.ERROR, msg: 'Update failure', data: null }
     }
   }
 }

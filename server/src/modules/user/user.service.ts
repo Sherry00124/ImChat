@@ -37,10 +37,10 @@ export class UserService {
         data = await this.userRepository.findOne({
           where: { userId: userId }
         })
-        return { msg: '获取用户成功', data }
+        return { msg: 'Get User Success', data }
       }
     } catch (e) {
-      return { code: RCode.ERROR, msg: '获取用户失败', data: e }
+      return { code: RCode.ERROR, msg: 'Failed to get user', data: e }
     }
   }
 
@@ -57,11 +57,19 @@ export class UserService {
             userArr.push(data)
           }
         }
-        return { msg: '获取用户信息成功', data: userArr }
+        return { msg: 'Get user information successfully', data: userArr }
       }
-      return { code: RCode.FAIL, msg: '获取用户信息失败', data: null }
+      return {
+        code: RCode.FAIL,
+        msg: 'Failed to get user information',
+        data: null
+      }
     } catch (e) {
-      return { code: RCode.ERROR, msg: '获取用户信息失败', data: e }
+      return {
+        code: RCode.ERROR,
+        msg: 'Failed to get user information',
+        data: e
+      }
     }
   }
 
@@ -72,18 +80,18 @@ export class UserService {
           username
         })
         if (isHaveName) {
-          return { code: 1, msg: '用户名重复', data: '' }
+          return { code: 1, msg: 'Duplicate user name', data: '' }
         }
         const newUser = await this.userRepository.findOne({
           userId: oldUser.userId
         })
         newUser.username = username
         await this.userRepository.update(oldUser.userId, newUser)
-        return { msg: '更新用户名成功', data: newUser }
+        return { msg: 'Updated username successfully', data: newUser }
       }
-      return { code: RCode.FAIL, msg: '更新失败', data: '' }
+      return { code: RCode.FAIL, msg: 'Update failure', data: '' }
     } catch (e) {
-      return { code: RCode.ERROR, msg: '更新用户名失败', data: e }
+      return { code: RCode.ERROR, msg: 'Failed to update username', data: e }
     }
   }
 
@@ -96,11 +104,15 @@ export class UserService {
         const backUser = JSON.parse(JSON.stringify(newUser))
         newUser.password = md5(password)
         await this.userRepository.update(user.userId, newUser)
-        return { msg: '更新用户密码成功', data: backUser }
+        return { msg: 'Update user password successfully', data: backUser }
       }
-      return { code: RCode.FAIL, msg: '更新失败', data: '' }
+      return { code: RCode.FAIL, msg: 'Update failure', data: '' }
     } catch (e) {
-      return { code: RCode.ERROR, msg: '更新用户密码失败', data: e }
+      return {
+        code: RCode.ERROR,
+        msg: 'Failed to update user password',
+        data: e
+      }
     }
   }
 
@@ -123,11 +135,11 @@ export class UserService {
         await this.friendMessageRepository.delete({ userId: did })
         await this.friendMessageRepository.delete({ friendId: did })
         await this.userRepository.delete({ userId: did })
-        return { msg: '用户删除成功' }
+        return { msg: 'User deleted successfully' }
       }
-      return { code: RCode.FAIL, msg: '用户删除失败' }
+      return { code: RCode.FAIL, msg: 'User Deletion Failed' }
     } catch (e) {
-      return { code: RCode.ERROR, msg: '用户删除失败', data: e }
+      return { code: RCode.ERROR, msg: 'User Deletion Failed', data: e }
     }
   }
 
@@ -139,9 +151,13 @@ export class UserService {
         })
         return { data: users }
       }
-      return { code: RCode.FAIL, msg: '请输入用户名', data: null }
+      return {
+        code: RCode.FAIL,
+        msg: 'Please enter your user name',
+        data: null
+      }
     } catch (e) {
-      return { code: RCode.ERROR, msg: '查找用户错误', data: null }
+      return { code: RCode.ERROR, msg: 'Finding User Errors', data: null }
     }
   }
 
@@ -157,9 +173,9 @@ export class UserService {
       stream.write(file.buffer)
       newUser.avatar = `/avatar/${random}${file.originalname}`
       await this.userRepository.save(newUser)
-      return { msg: '修改头像成功', data: newUser }
+      return { msg: 'Changed avatar successfully', data: newUser }
     } else {
-      return { code: RCode.FAIL, msg: '修改头像失败' }
+      return { code: RCode.FAIL, msg: 'Failed to change avatar' }
     }
   }
 }

@@ -24,10 +24,10 @@
             :loading="loading"
             type="primary"
           >
-            删除用户
+            Delete User
           </a-button>
           <a-button @click="_setActiveRoom(data.userId)" type="primary" v-if="friendGather[data.userId]">发消息</a-button>
-          <a-button @click="addFriend(data.userId)" :loading="loading" type="primary" v-else>添加好友</a-button>
+          <a-button @click="addFriend(data.userId)" :loading="loading" type="primary" v-else>Add Friends</a-button>
         </a-card>
       </div>
       <a-avatar

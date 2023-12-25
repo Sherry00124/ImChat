@@ -48,7 +48,7 @@ const actions: ActionTree<ChatState, RootState> = {
     });
 
     socket.on('connect', async () => {
-      console.log('连接成功');
+      console.log('connect successfully');
       // 获取聊天室所需所有信息
       socket.emit('chatData', token);
 
@@ -123,7 +123,7 @@ const actions: ActionTree<ChatState, RootState> = {
           // 获取群里面所有用户的用户信息
           socket.emit('chatData', token);
         }
-        Vue.prototype.$message.info(`成功加入群${group.groupName}`);
+        Vue.prototype.$message.info(`Successfully joined the group${group.groupName}`);
         commit(SET_ACTIVE_ROOM, state.groupGather[group.groupId]);
         commit(`app/${SET_LOADING}`, false, { root: true });
       }
@@ -185,7 +185,7 @@ const actions: ActionTree<ChatState, RootState> = {
         commit(SET_ACTIVE_ROOM, state.friendGather[res.data.friendId]);
       }
       if (!res.code) {
-        console.log('成功加入私聊房间');
+        console.log('Successfully joined the private chat room');
       }
     });
 
@@ -233,7 +233,7 @@ const actions: ActionTree<ChatState, RootState> = {
           commit(SET_ACTIVE_ROOM, state.groupGather[DEFAULT_GROUP]);
           Vue.prototype.$message.success(res.msg);
         } else {
-          console.log(`--用户--${res.data.userId}`, '--退出群--', res.data.groupId);
+          console.log(`--User--${res.data.userId}`, '--logout from--', res.data.groupId);
           // 广播给其他用户,从群成员中删除该成员
           commit(DEL_GROUP_MEMBER, res.data);
         }

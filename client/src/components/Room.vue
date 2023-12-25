@@ -16,11 +16,11 @@
       >
         <!-- 自定义右键菜单 -->
         <v-contextmenu :ref="'groupmenu' + chat.groupId">
-          <v-contextmenu-item v-if="chat.isTop === true" @click="handleCommand('TOP_REVERT', chat)">取消置顶</v-contextmenu-item>
-          <v-contextmenu-item v-else @click="handleCommand('TOP', chat)">置顶</v-contextmenu-item>
-          <v-contextmenu-item @click="handleCommand('READ', chat)">标记已读</v-contextmenu-item>
+          <v-contextmenu-item v-if="chat.isTop === true" @click="handleCommand('TOP_REVERT', chat)">Untop</v-contextmenu-item>
+          <v-contextmenu-item v-else @click="handleCommand('TOP', chat)">Sticky</v-contextmenu-item>
+          <v-contextmenu-item @click="handleCommand('READ', chat)">Mark as read</v-contextmenu-item>
           <v-contextmenu-item divider></v-contextmenu-item>
-          <v-contextmenu-item @click="handleCommand('DELETE', chat)">删除</v-contextmenu-item>
+          <v-contextmenu-item @click="handleCommand('DELETE', chat)">Delete</v-contextmenu-item>
         </v-contextmenu>
         <a-badge class="room-card-badge" dot v-if="unReadGather[chat.groupId]" />
         <img class="room-card-type" src="~@/assets/group.png" alt="" />
@@ -37,7 +37,7 @@
           <div class="room-card-new" v-if="chat.messages">
             <!-- 消息列表未读信息简述考虑撤回情况 -->
             <template v-if="chat.messages[chat.messages.length - 1].isRevoke">
-              <div>{{ chat.messages[chat.messages.length - 1].revokeUserName }}撤回了一条消息</div>
+              <div>{{ chat.messages[chat.messages.length - 1].revokeUserName }}withdraw a message</div>
             </template>
             <template v-else>
               <div

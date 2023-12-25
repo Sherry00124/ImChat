@@ -20,16 +20,16 @@
       </div>
     </div>
     <!-- 底部工具栏 -->
-    <a-tooltip placement="topLeft" arrow-point-at-center>
+    <!-- <a-tooltip placement="topLeft" arrow-point-at-center>
       <div slot="title">
         <div>qq群289438105~</div>
         <div>觉得还不错的话可以Star鼓励一下~</div>
         <div>截图粘贴可发送图片</div>
       </div>
       <a-icon type="bulb" class="tool-tip icon" />
-    </a-tooltip>
+    </a-tooltip> -->
     <!-- 消息列表/通讯录切换 -->
-    <a-tooltip placement="left" title="消息列表" arrow-point-at-center>
+    <a-tooltip placement="left" title="Message list" arrow-point-at-center>
       <a-icon
         type="wechat"
         theme="filled"
@@ -40,7 +40,7 @@
         @click="setActiveTabName('message')"
       />
     </a-tooltip>
-    <a-tooltip placement="left" theme="filled" title="通讯录" arrow-point-at-center>
+    <a-tooltip placement="left" theme="filled" title="Directory" arrow-point-at-center>
       <a-icon
         :class="{
           'tool-active': activeTabName === 'contacts',
@@ -50,10 +50,10 @@
         @click="setActiveTabName('contacts')"
       />
     </a-tooltip>
-    <a-icon type="skin" class="tool-skin icon" @click="showBackgroundModal = true" />
-    <a v-if="isDemo" href="https://github.com/BoBoooooo/tyloo-chat" target="_blank" class="tool-github icon"><a-icon type="github" /></a>
+    <!-- <a-icon type="skin" class="tool-skin icon" @click="showBackgroundModal = true" /> -->
+    <!-- <a v-if="isDemo" href="https://github.com/BoBoooooo/tyloo-chat" target="_blank" class="tool-github icon"><a-icon type="github" /></a> -->
     <a-icon class="tool-out icon" type="poweroff" @click="logout" />
-    <a-modal title="用户信息" :visible="showUserModal" footer="" @cancel="showUserModal = false">
+    <a-modal title="User Info" :visible="showUserModal" footer="" @cancel="showUserModal = false">
       <div class="tool-user">
         <div
           @mouseover="showUpload = true"
@@ -65,20 +65,20 @@
           <a-upload v-if="showUpload && !uploading" class="tool-user-upload" :show-upload-list="false" :before-upload="beforeUpload">
             <div class="text">
               <a-icon type="upload" style="margin-right: 4px" />
-              <span>更换头像</span>
+              <span>Change avatar</span>
             </div>
           </a-upload>
           <a-icon class="loading" v-if="uploading" type="loading" spin />
         </div>
         <div class="tool-user-info">
-          <div class="tool-user-title">更改用户名</div>
-          <a-input class="tool-user-input" v-model="username" placeholder="请输入新用户名"></a-input>
-          <a-button type="primary" @click="changeUserName">确认</a-button>
+          <div class="tool-user-title">Change username</div>
+          <a-input class="tool-user-input" v-model="username" placeholder="Please enter a new username"></a-input>
+          <a-button type="primary" @click="changeUserName">Confirm</a-button>
         </div>
         <div class="tool-user-info">
-          <div class="tool-user-title">更改密码</div>
-          <a-input-password class="tool-user-input" v-model="password" placeholder="请输入新密码"></a-input-password>
-          <a-button type="primary" @click="changePassword">确认</a-button>
+          <div class="tool-user-title">Change Password</div>
+          <a-input-password class="tool-user-input" v-model="password" placeholder="Please enter a new password"></a-input-password>
+          <a-button type="primary" @click="changePassword">Confirm</a-button>
         </div>
       </div>
     </a-modal>

@@ -12,9 +12,9 @@ import { AuthModule } from './modules/auth/auth.module'
       type: 'mysql',
       host: 'localhost',
       port: 3306,
-      username: 'root',
-      password: '',
-      database: 'chat',
+      username: 'chat1',
+      password: '123456',
+      database: 'chat1',
       charset: 'utf8mb4', // 设置chatset编码为utf8mb4
       autoLoadEntities: true,
       synchronize: true

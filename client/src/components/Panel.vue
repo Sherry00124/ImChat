@@ -24,21 +24,21 @@
       >
         <div class="active-content">
           <div class="active-content-title">
-            <div class="active-content-title-label">群名</div>
+            <div class="active-content-title-label">Group name</div>
             <div>
               <span class="active-content-title-detail">{{ activeRoom.groupName }}</span>
               <a-icon v-if="currentUserIsManager" @click="showGroupNameDialog = true" type="edit" />
             </div>
-            <div class="active-content-title-label">群公告</div>
+            <!-- <div class="active-content-title-label">群公告</div>
             <div>
               <span class="active-content-title-detail">{{ activeRoom.notice }}</span>
               <a-icon @click="showGroupNoticeDialog = true" :type="currentUserIsManager ? 'edit' : 'eye'" />
-            </div>
+            </div> -->
           </div>
-          <div class="active-content-sum">群人数: ({{ activeNum }}/{{ groupUsers.length }})</div>
+          <div class="active-content-sum">Group accounts: ({{ activeNum }}/{{ groupUsers.length }})</div>
           <div class="active-content-adduser" @click="showContactDialog">
             <a-icon class="icon" type="plus-square" />
-            <span class="label">添加成员</span>
+            <span class="label">Add member</span>
           </div>
           <div class="active-content-users">
             <div class="active-content-user" v-for="(data, index) in groupUsers" :key="data.userId + index">
@@ -49,36 +49,47 @@
               <a-icon class="icon" type="user" v-if="data.isManager === 1" />
             </div>
           </div>
-          <a-button type="danger" class="active-content-out" @click="exitGroup">退出群聊</a-button>
+          <a-button type="danger" class="active-content-out" @click="exitGroup">Logout</a-button>
         </div>
       </a-drawer>
     </div>
     <!-- 删除好友,机器人默认不允许删除 -->
     <div v-else-if="!isRobot">
-      <a-popconfirm title="确定要删除该好友吗？" placement="bottomRight" ok-text="Yes" cancel-text="No" @confirm="exitFriend">
+      <a-popconfirm
+        title="Are you sure you want to delete this friend?"
+        placement="bottomRight"
+        ok-text="Yes"
+        cancel-text="No"
+        @confirm="exitFriend"
+      >
         <a-icon type="more" style="transform: rotate(90deg)" class="active-button" />
       </a-popconfirm>
     </div>
     <!-- 修改群公告 -->
-    <a-modal v-if="activeRoom.notice" title="群公告" :visible="showGroupNoticeDialog" @cancel="() => (showGroupNoticeDialog = false)">
+    <a-modal
+      v-if="activeRoom.notice"
+      title="Group Announcement"
+      :visible="showGroupNoticeDialog"
+      @cancel="() => (showGroupNoticeDialog = false)"
+    >
       <a-textarea v-if="currentUserIsManager" v-model="groupNotice"></a-textarea>
       <p v-else>
         {{ activeRoom.notice }}
       </p>
       <template #footer>
-        <a-button v-if="currentUserIsManager" type="primary" @click="handleUpdateGroupInfo"> 修改 </a-button>
-        <a-button @click="() => (showGroupNoticeDialog = false)">关闭</a-button>
+        <a-button v-if="currentUserIsManager" type="primary" @click="handleUpdateGroupInfo"> Modify </a-button>
+        <a-button @click="() => (showGroupNoticeDialog = false)">Close</a-button>
       </template>
     </a-modal>
     <!-- 修改群名称 -->
-    <a-modal v-if="activeRoom.groupName" title="群名称" :visible="showGroupNameDialog" @cancel="() => (showGroupNameDialog = false)">
+    <a-modal v-if="activeRoom.groupName" title="Group name" :visible="showGroupNameDialog" @cancel="() => (showGroupNameDialog = false)">
       <a-input v-if="currentUserIsManager" v-model="groupName"></a-input>
       <p v-else>
         {{ activeRoom.groupName }}
       </p>
       <template #footer>
-        <a-button type="primary" @click="handleUpdateGroupInfo"> 修改 </a-button>
-        <a-button @click="() => (showGroupNameDialog = false)">关闭</a-button>
+        <a-button type="primary" @click="handleUpdateGroupInfo"> Modify </a-button>
+        <a-button @click="() => (showGroupNameDialog = false)">Close</a-button>
       </template>
     </a-modal>
     <!-- 添加用户进群 -->

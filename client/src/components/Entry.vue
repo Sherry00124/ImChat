@@ -130,7 +130,7 @@ export default class Entry extends Vue {
     console.log(this.lastTime);
     console.log(nowTime);
     if (nowTime - this.lastTime < 200) {
-      return this.$message.error('消息发送太频繁！');
+      return this.$message.error('Messages are sent too often!');
     }
     fn(file);
     this.lastTime = nowTime;
@@ -141,11 +141,11 @@ export default class Entry extends Vue {
    */
   preSendMessage() {
     if (!this.text.trim()) {
-      this.$message.error('不能发送空消息!');
+      this.$message.error('Cannot send empty messages!');
       return;
     }
     if (this.text.length > 220) {
-      this.$message.error('消息太长!');
+      this.$message.error('The message is too long!');
       return;
     }
     console.log(this.text);
@@ -278,10 +278,10 @@ export default class Entry extends Vue {
       messageType = 'file';
     }
     const maxSize = messageType === 'image' ? 0.5 : 20;
-    const isLt1M = file.size / 1024 / 1024 < maxSize;
-    if (!isLt1M) {
-      return this.$message.error(messageType === 'image' ? '图片必须小于500K!' : '文件必须小于20M!');
-    }
+    // const isLt1M = file.size / 1024 / 1024 < maxSize;
+    // if (!isLt1M) {
+    //   return this.$message.error(messageType === 'image' ? '图片必须小于500K!' : '文件必须小于20M!');
+    // }
     if (messageType === 'image') {
       const image = new Image();
       const url = window.URL || window.webkitURL;
