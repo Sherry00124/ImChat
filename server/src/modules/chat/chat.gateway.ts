@@ -278,6 +278,7 @@ export class ChatGateway {
     @MessageBody() data: UserFriendMap
   ): Promise<any> {
     const isUser = await this.userRepository.findOne({ userId: data.userId })
+    console.log('addFriend')
     if (isUser) {
       if (data.friendId && data.userId) {
         if (data.userId === data.friendId) {
